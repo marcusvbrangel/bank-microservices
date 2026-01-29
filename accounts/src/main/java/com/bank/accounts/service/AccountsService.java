@@ -1,7 +1,6 @@
 package com.bank.accounts.service;
 
 import com.bank.accounts.constants.AccountsConstants;
-import com.bank.accounts.dto.AccountDto;
 import com.bank.accounts.dto.CustomerAccountDto;
 import com.bank.accounts.dto.CustomerDto;
 import com.bank.accounts.entity.Accounts;
@@ -13,6 +12,7 @@ import com.bank.accounts.repository.AccountsRepository;
 import com.bank.accounts.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,6 +25,7 @@ public class AccountsService {
     private AccountsRepository accountsRepository;
     private CustomerRepository customerRepository;
 
+    @Transactional
     public void createAccount(CustomerDto customerDto) {
         Customer customer = CustomerMapper.mapToCustomer(customerDto);
         Optional<Customer> optionalCustomer = customerRepository.findByMobileNumber(customerDto.mobileNumber());
@@ -60,6 +61,7 @@ public class AccountsService {
 
     }
 
+    @Transactional
     public boolean updateAccount(CustomerAccountDto customerAccountDto) {
 
         Accounts accounts = accountsRepository.findById(customerAccountDto.accountNumber())
@@ -87,6 +89,20 @@ public class AccountsService {
         customer.setUpdatedBy("anonymous");
 
         customerRepository.save(customer);
+
+        return true;
+
+    }
+
+    @Transactional
+    public boolean deleteAccount(String mobileNumber) {
+
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Wasn't possible to find a customer with the mobile number " + mobileNumber));
+
+        accountsRepository.deleteByCustomerId(customer.getCustomerId());
+        customerRepository.deleteById(customer.getCustomerId());
 
         return true;
 

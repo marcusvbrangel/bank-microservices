@@ -40,7 +40,17 @@ public class AccountsController {
         boolean isUpdated = accountsService.updateAccount(customerAccountDto);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseSuccessDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
+                .body(new ResponseSuccessDto(AccountsConstants.STATUS_200, "Account updated successfully"));
+
+    }
+
+    @DeleteMapping("/{mobileNumber}")
+    public ResponseEntity<ResponseSuccessDto> deleteAccount(@PathVariable String mobileNumber) {
+
+        boolean isDeleted = accountsService.deleteAccount(mobileNumber);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseSuccessDto(AccountsConstants.STATUS_200, "Account deleted successfully"));
 
     }
 
