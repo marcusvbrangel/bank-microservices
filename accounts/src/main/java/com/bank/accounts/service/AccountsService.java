@@ -33,8 +33,7 @@ public class AccountsService {
             throw new CustomerAlreadyExistsException("Customer with mobile number "
                     + customerDto.mobileNumber() + " already exists");
         }
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("anonymous");
+
         Customer savedCustomer = customerRepository.save(customer);
         accountsRepository.save(createNewAccount(savedCustomer));
     }
@@ -71,8 +70,6 @@ public class AccountsService {
         accounts.setAccountNumber( customerAccountDto.accountNumber());
         accounts.setBranchAddress(customerAccountDto.branchAddress());
         accounts.setAccountType(customerAccountDto.accountType());
-        accounts.setUpdatedAt(LocalDateTime.now());
-        accounts.setUpdatedBy("anonymous");
 
         accounts =  accountsRepository.save(accounts);
 
@@ -85,8 +82,6 @@ public class AccountsService {
         customer.setName(customerAccountDto.name());
         customer.setEmail(customerAccountDto.email());
         customer.setMobileNumber(customerAccountDto.mobileNumber());
-        customer.setUpdatedAt(LocalDateTime.now());
-        customer.setUpdatedBy("anonymous");
 
         customerRepository.save(customer);
 
@@ -117,8 +112,7 @@ public class AccountsService {
         newAccount.setAccountNumber(randomAccNumber);
         newAccount.setAccountType(AccountsConstants.SAVINGS);
         newAccount.setBranchAddress(AccountsConstants.ADDRESS);
-        newAccount.setCreatedAt(LocalDateTime.now());
-        newAccount.setCreatedBy("anonymous");
+
         return newAccount;
     }
 
