@@ -1,53 +1,37 @@
 package com.bank.accounts.controller;
 
 import com.bank.accounts.constants.AccountsConstants;
-import com.bank.accounts.dto.AccountDto;
-import com.bank.accounts.dto.ResponseSuccess;
+import com.bank.accounts.dto.CustomerAccountDto;
+import com.bank.accounts.dto.CustomerDto;
+import com.bank.accounts.dto.ResponseSuccessDto;
+import com.bank.accounts.service.AccountsService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/accounts",
-                produces = MediaType.APPLICATION_JSON_VALUE,
-                consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/accounts")
+@AllArgsConstructor
 public class AccountsController {
 
+    private AccountsService accountsService;
+
     @PostMapping
-    public ResponseEntity<ResponseSuccess> create(@RequestBody AccountDto accountCreateRequest) {
+    public ResponseEntity<ResponseSuccessDto> createAccount(@RequestBody CustomerDto customerDto) {
 
-
+        accountsService.createAccount(customerDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ResponseSuccess(AccountsConstants.STATUS_201, AccountsConstants.MESSAGE_201));
+                .body(new ResponseSuccessDto(AccountsConstants.STATUS_201, AccountsConstants.MESSAGE_201));
 
     }
 
+    @GetMapping("/{mobileNumber}")
+    public ResponseEntity<CustomerAccountDto> fetchAccountByMobileNumber(@PathVariable String mobileNumber) {
+        CustomerAccountDto customerAccountDto = accountsService.fetchAccountByMobileNumber(mobileNumber);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(customerAccountDto);
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
