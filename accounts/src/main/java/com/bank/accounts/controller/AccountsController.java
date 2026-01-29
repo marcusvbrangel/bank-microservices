@@ -34,4 +34,15 @@ public class AccountsController {
                 .body(customerAccountDto);
     }
 
+    @PutMapping
+    public ResponseEntity<ResponseSuccessDto> updateAccount(@RequestBody CustomerAccountDto customerAccountDto) {
+
+        boolean isUpdated = accountsService.updateAccount(customerAccountDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseSuccessDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
+
+    }
+
 }
+

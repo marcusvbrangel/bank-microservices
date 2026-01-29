@@ -8,7 +8,6 @@ import com.bank.accounts.entity.Accounts;
 import com.bank.accounts.entity.Customer;
 import com.bank.accounts.exception.CustomerAlreadyExistsException;
 import com.bank.accounts.exception.ResourceNotFoundException;
-import com.bank.accounts.mapper.AccountsMapper;
 import com.bank.accounts.mapper.CustomerMapper;
 import com.bank.accounts.repository.AccountsRepository;
 import com.bank.accounts.repository.CustomerRepository;
@@ -60,6 +59,39 @@ public class AccountsService {
                                 + customer.getCustomerId()));
 
     }
+
+    public boolean updateAccount(CustomerAccountDto customerAccountDto) {
+
+        Accounts accounts = accountsRepository.findById(customerAccountDto.accountNumber())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Wasn't possible to find account with the account number " + customerAccountDto.accountNumber()));
+
+        accounts.setAccountNumber( customerAccountDto.accountNumber());
+        accounts.setBranchAddress(customerAccountDto.branchAddress());
+        accounts.setAccountType(customerAccountDto.accountType());
+        accounts.setUpdatedAt(LocalDateTime.now());
+        accounts.setUpdatedBy("anonymous");
+
+        accounts =  accountsRepository.save(accounts);
+
+        Long customerId = accounts.getCustomerId();
+
+        Customer customer = customerRepository.findById(accounts.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Wasn't possible to find a customer with the customer id " + customerId));
+
+        customer.setName(customerAccountDto.name());
+        customer.setEmail(customerAccountDto.email());
+        customer.setMobileNumber(customerAccountDto.mobileNumber());
+        customer.setUpdatedAt(LocalDateTime.now());
+        customer.setUpdatedBy("anonymous");
+
+        customerRepository.save(customer);
+
+        return true;
+
+    }
+
 
     private Accounts createNewAccount(Customer customer) {
         Accounts newAccount = new Accounts();
