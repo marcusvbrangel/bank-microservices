@@ -5,20 +5,24 @@ import com.bank.accounts.dto.CustomerAccountDto;
 import com.bank.accounts.dto.CustomerDto;
 import com.bank.accounts.dto.ResponseSuccessDto;
 import com.bank.accounts.service.AccountsService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/accounts")
 @AllArgsConstructor
+@Validated
 public class AccountsController {
 
     private AccountsService accountsService;
 
     @PostMapping
-    public ResponseEntity<ResponseSuccessDto> createAccount(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<ResponseSuccessDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
 
         accountsService.createAccount(customerDto);
 
@@ -28,14 +32,16 @@ public class AccountsController {
     }
 
     @GetMapping("/{mobileNumber}")
-    public ResponseEntity<CustomerAccountDto> fetchAccountByMobileNumber(@PathVariable String mobileNumber) {
+    public ResponseEntity<CustomerAccountDto> fetchAccountByMobileNumber(
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+            @PathVariable String mobileNumber) {
         CustomerAccountDto customerAccountDto = accountsService.fetchAccountByMobileNumber(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(customerAccountDto);
     }
 
     @PutMapping
-    public ResponseEntity<ResponseSuccessDto> updateAccount(@RequestBody CustomerAccountDto customerAccountDto) {
+    public ResponseEntity<ResponseSuccessDto> updateAccount(@Valid @RequestBody CustomerAccountDto customerAccountDto) {
 
         boolean isUpdated = accountsService.updateAccount(customerAccountDto);
 
@@ -45,7 +51,9 @@ public class AccountsController {
     }
 
     @DeleteMapping("/{mobileNumber}")
-    public ResponseEntity<ResponseSuccessDto> deleteAccount(@PathVariable String mobileNumber) {
+    public ResponseEntity<ResponseSuccessDto> deleteAccount(
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+            @PathVariable String mobileNumber) {
 
         boolean isDeleted = accountsService.deleteAccount(mobileNumber);
 
