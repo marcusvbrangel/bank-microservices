@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 title = "Accounts microservices RESP API Documentation",
-                description = "Wolf Bank Accounts microservices REST API Documentation",
+                description = "WolfBank Accounts microservices REST API Documentation",
                 version = "v1",
                 contact = @Contact(
                         name = "Support",
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
                 )
         ),
         externalDocs = @ExternalDocumentation(
-                description = "Wolf Banc accounts microservices REST API Documentation",
+                description = "WolfBank accounts microservices REST API Documentation",
                 url = "docs@wolfbank.com"
         )
 )
