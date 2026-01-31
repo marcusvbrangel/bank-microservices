@@ -1,0 +1,326 @@
+{
+  "info": {
+    "_postman_id": "4c1cc788-4e02-4eac-936f-2508050a0809",
+    "name": "Bank Microservices",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12794460",
+    "_collection_link": "https://go.postman.co/collection/12794460-4c1cc788-4e02-4eac-936f-2508050a0809?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Create Account",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Silvio Santos\",\n    \"email\": \"silvio@terra.com\",\n    \"mobileNumber\": \"2458789584\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8081/api/v1/accounts",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fetch Account By Mobile Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8081/api/v1/accounts/2458789584",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "accounts",
+                "2458789584"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Account",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Silvio Santos 2\",\n    \"email\": \"silvio2@terra.com\",\n    \"mobileNumber\": \"2458789584\",\n    \"accountNumber\": 1830572220,\n    \"accountType\": \"Savings2\",\n    \"branchAddress\": \"123 Main Street, New York 2\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8081/api/v1/accounts",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8081/api/v1/accounts/2458789584",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "accounts",
+                "2458789584"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Loans",
+      "item": [
+        {
+          "name": "Create Loan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mobileNumber\": \"2222333399\",\n    \"loanNumber\": \"121234567891\",\n    \"loanType\": \"Home\",\n    \"totalLoan\": 1487,\n    \"amountPaid\": 978,\n    \"outstandingAmount\": 412\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8082/api/v1/loans",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "v1",
+                "loans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fetch Loan By Mobile Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8082/api/v1/loans/2222333399",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "v1",
+                "loans",
+                "2222333399"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Loan",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mobileNumber\": \"2222333399\",\n    \"loanNumber\": \"112123456755\",\n    \"loanType\": \"Home 55\",\n    \"totalLoan\": 1485,\n    \"amountPaid\": 975,\n    \"outstandingAmount\": 415\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8082/api/v1/loans",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "v1",
+                "loans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Loan",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8082/api/v1/loans/2222333399",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "v1",
+                "loans",
+                "2222333399"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cards",
+      "item": [
+        {
+          "name": "Create Card",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mobileNumber\": \"0123456789\",\n    \"cardNumber\": \"111222333444\",\n    \"cardType\": \"Credit\",\n    \"totalLimit\": 8000,\n    \"amountUsed\":2000,\n    \"availableAmount\": 5000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8083/api/v1/cards",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "api",
+                "v1",
+                "cards"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fetch Card By Mobile Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8083/api/v1/cards/0123456789",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "0123456789"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Card",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mobileNumber\": \"0123456789\",\n    \"cardNumber\": \"111222333447\",\n    \"cardType\": \"Credit 7\",\n    \"totalLimit\": 8007,\n    \"amountUsed\": 2007,\n    \"availableAmount\": 50007\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8083/api/v1/cards",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "api",
+                "v1",
+                "cards"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Card",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8083/api/v1/cards/0123456789",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "0123456789"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
