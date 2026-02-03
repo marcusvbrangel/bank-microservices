@@ -49,7 +49,7 @@ public class AccountsService {
                             customer.getName(),
                             customer.getEmail(),
                             customer.getMobileNumber(),
-                            account.getAccountNumber(),
+                            String.valueOf(account.getAccountNumber()),
                             account.getAccountType(),
                             account.getBranchAddress() );
                 })
@@ -60,13 +60,12 @@ public class AccountsService {
     }
 
     @Transactional
-    public boolean updateAccount(CustomerAccountDto customerAccountDto) {
+    public void updateAccountByAccountNumber(String accountNumber, CustomerAccountDto customerAccountDto) {
 
-        Accounts accounts = accountsRepository.findById(customerAccountDto.accountNumber())
+        Accounts accounts = accountsRepository.findById(Long.valueOf(accountNumber))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find account with the account number " + customerAccountDto.accountNumber()));
+                        "Wasn't possible to find account with the account number " + accountNumber));
 
-        accounts.setAccountNumber( customerAccountDto.accountNumber());
         accounts.setBranchAddress(customerAccountDto.branchAddress());
         accounts.setAccountType(customerAccountDto.accountType());
 
@@ -79,17 +78,16 @@ public class AccountsService {
                         "Wasn't possible to find a customer with the customer id " + customerId));
 
         customer.setName(customerAccountDto.name());
+        customer.setMobileNumber(customerAccountDto.mobileNumber());
         customer.setEmail(customerAccountDto.email());
         customer.setMobileNumber(customerAccountDto.mobileNumber());
 
         customerRepository.save(customer);
 
-        return true;
-
     }
 
     @Transactional
-    public boolean deleteAccount(String mobileNumber) {
+    public void deleteAccountByMobileNumber(String mobileNumber) {
 
         Customer customer = customerRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -97,8 +95,6 @@ public class AccountsService {
 
         accountsRepository.deleteByCustomerId(customer.getCustomerId());
         customerRepository.deleteById(customer.getCustomerId());
-
-        return true;
 
     }
 

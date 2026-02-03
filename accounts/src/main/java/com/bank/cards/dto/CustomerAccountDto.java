@@ -41,8 +41,8 @@ public record CustomerAccountDto(
                 example = "1830572220"
         )
         @NotEmpty(message = "Account number can not be null or empty")
-        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
-                Long accountNumber,
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Account number must be 10 digits")
+        String accountNumber,
 
         @Schema(
                 description = "Account type of the account",

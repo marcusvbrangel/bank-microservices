@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/cards")
+@RequestMapping(value = "/api/v1/accounts")
 @AllArgsConstructor
 @Validated
 @Tag(
@@ -31,7 +32,6 @@ public class AccountsController {
 
     private AccountsService accountsService;
 
-    @PostMapping
     @Operation(
             summary = "Create Account REST API",
             description = "REST API to create a new Customer and Account inside WolfBank"
@@ -40,6 +40,7 @@ public class AccountsController {
             responseCode = "201",
             description = "HTTP Status CREATED"
     )
+    @PostMapping
     public ResponseEntity<ResponseSuccessDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
 
         accountsService.createAccount(customerDto);
@@ -49,7 +50,6 @@ public class AccountsController {
 
     }
 
-    @GetMapping("/{mobileNumber}")
     @Operation(
             summary = "Fetch Account Details REST API",
             description = "REST API to fetch Customer and Account details base on a mobile number"
@@ -58,6 +58,7 @@ public class AccountsController {
             responseCode = "200",
             description = "HTTP Status OK"
     )
+    @GetMapping("/{mobileNumber}")
     public ResponseEntity<CustomerAccountDto> fetchAccountByMobileNumber(
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
             @PathVariable String mobileNumber) {
@@ -66,14 +67,14 @@ public class AccountsController {
                 .body(customerAccountDto);
     }
 
-    @PutMapping
     @Operation(
             summary = "Update Account Details REST API",
             description = "REST API to update Customer and Account details base on a mobile number"
     )
+
     @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status OK"
+            responseCode = "204",
+            description = "HTTP Status NO_CONTENT"
     )
     @ApiResponse(
             responseCode = "500",
@@ -82,36 +83,41 @@ public class AccountsController {
                     schema = @Schema(implementation = ResponseErrorDto.class)
             )
     )
-    public ResponseEntity<ResponseSuccessDto> updateAccount(@Valid @RequestBody CustomerAccountDto customerAccountDto) {
+    @PutMapping("/{accountNumber}")
+    public ResponseEntity<ResponseSuccessDto> updateAccountByAccountNumber(
+            @NotEmpty(message = "Account number can not be null or empty")
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Account number must be 10 digits")
+            @PathVariable String accountNumber,
+            @Valid @RequestBody CustomerAccountDto customerAccountDto) {
 
-        accountsService.updateAccount(customerAccountDto);
+        accountsService.updateAccountByAccountNumber(accountNumber, customerAccountDto);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseSuccessDto(AccountsConstants.STATUS_200, "Account updated successfully"));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new ResponseSuccessDto(HttpStatus.NO_CONTENT.toString(), "Account updated successfully"));
 
     }
 
-    @DeleteMapping("/{mobileNumber}")
     @Operation(
             summary = "Delete Account and Customer Details REST API",
             description = "REST API to delete Customer and Account details base on a mobile number"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "HTTP Status OK"
+            description = "HTTP Status NO_CONTENT"
     )
     @ApiResponse(
             responseCode = "500",
             description = "HTTP Status Internal Server Error"
     )
-    public ResponseEntity<ResponseSuccessDto> deleteAccount(
+    @DeleteMapping("/{mobileNumber}")
+    public ResponseEntity<ResponseSuccessDto> deleteAccountByMobileNumber(
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
             @PathVariable String mobileNumber) {
 
-        boolean isDeleted = accountsService.deleteAccount(mobileNumber);
+        accountsService.deleteAccountByMobileNumber(mobileNumber);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseSuccessDto(AccountsConstants.STATUS_200, "Account deleted successfully"));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new ResponseSuccessDto(HttpStatus.NO_CONTENT.toString(), "Account deleted successfully"));
 
     }
 
