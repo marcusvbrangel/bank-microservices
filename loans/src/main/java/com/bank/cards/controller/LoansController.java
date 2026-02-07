@@ -1,11 +1,14 @@
 package com.bank.cards.controller;
 
+import com.bank.cards.dto.LoansContactInfoDto;
 import com.bank.cards.dto.LoansDto;
 import com.bank.cards.dto.ResponseSuccessDto;
 import com.bank.cards.service.LoansService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,11 +16,23 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/loans")
-@AllArgsConstructor
 @Validated
 public class LoansController {
 
     private LoansService loansService;
+
+    @Value("${build.version}")
+    private String buildVersion;
+
+    @Autowired
+    private Environment environment;
+
+    @Autowired
+    private LoansContactInfoDto accountsContactInfoDto;
+
+    public LoansController(LoansService loansService) {
+        this.loansService = loansService;
+    }
 
     @PostMapping
     public ResponseEntity<ResponseSuccessDto> createLoan(@Valid @RequestBody LoansDto loansDto) {
@@ -58,6 +73,27 @@ public class LoansController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseSuccessDto(HttpStatus.OK.toString(), "Loan deleted successfully"));
 
+    }
+
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(buildVersion);
+    }
+
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<LoansContactInfoDto> getContactInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(accountsContactInfoDto);
     }
 
 }
