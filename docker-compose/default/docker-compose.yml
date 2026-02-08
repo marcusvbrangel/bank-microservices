@@ -5,12 +5,6 @@ services:
     container_name: configserver-ms
     ports:
       - "9091:9091"
-    healthcheck:
-      test: "curl --fail --silent localhost:9091/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
     extends:
       file: common-config.yml
       service: microservice-base-config
@@ -21,8 +15,7 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      configserver:
-        condition: service_healthy
+      - configserver
     environment:
       SPRING_APPLICATION_NAME: "accounts"
     extends:
@@ -35,8 +28,7 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      configserver:
-        condition: service_healthy
+      - configserver
     environment:
       SPRING_APPLICATION_NAME: "loans"
     extends:
@@ -49,8 +41,7 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      configserver:
-        condition: service_healthy
+      - configserver
     environment:
       SPRING_APPLICATION_NAME: "cards"
     extends:
