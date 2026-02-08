@@ -23,4 +23,4 @@ spring:
       hibernate:
         format_sql: true
   config:
-    import: "optional:configserver:http://localhost:8084/"
+    import: "optional:configserver:http://localhost:9091/"

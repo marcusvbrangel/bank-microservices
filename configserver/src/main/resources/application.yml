@@ -1,5 +1,5 @@
 server:
-  port: 8084
+  port: 9091
 
 spring:
   application:
@@ -12,18 +12,7 @@ spring:
       server:
         native:
           search-locations: "classpath:/config"
-#          search-locations: "file:///Users//eazybytes//Documents//config"
-#        git:
-#          uri: "https://github.com/eazybytes/eazybytes-config.git"
-#          default-label: main
-#          timeout: 5
-#          clone-on-start: true
-#          force-pull: true
-#  rabbitmq:
-#    host: "localhost"
-#    port: 5672
-#    username: "guest"
-#    password: "guest"
+          # search-locations: "file:///Users//eazybytes//Documents//config"
 
 management:
   endpoints:
