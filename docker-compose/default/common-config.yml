@@ -17,3 +17,5 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:9091/
+      DATASOURCE_USERNAME: postgres
+      DATASOURCE_PASSWORD: postgres
