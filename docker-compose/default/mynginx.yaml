@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    tier: web
+    app: myredis-nginx
+    env: dev
+  name: myredis-nginx
+spec:
+  containers:
+  - image: redis
+    name: myredis
+  containers:
+  - image: nginx
+    name: mynginx

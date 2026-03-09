@@ -1,11 +1,14 @@
 package com.bank.cards.controller;
 
 import com.bank.cards.constants.AccountsConstants;
-import com.bank.cards.dto.AccountsContactInfoDto;
-import com.bank.cards.dto.CustomerAccountDto;
-import com.bank.cards.dto.CustomerDto;
-import com.bank.cards.dto.ResponseSuccessDto;
+import com.bank.cards.dto.*;
 import com.bank.cards.service.AccountsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -17,6 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+    name = "CRUD REST APIs for Accounts in WolfBank",
+    description = "CRUD REST APIs in WolfBank to CREATE, UPDATE, FETCH AND DELETE account details"
+)
 @RestController
 @RequestMapping(value = "/api/v1/accounts")
 @Validated
@@ -37,6 +44,27 @@ public class AccountsController {
         this.accountsService = accountsService;
     }
 
+    @Operation(
+        summary = "Create Account REST API",
+        description = "REST API to create new Customer & Account inside WolfBank"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "201",
+            description = "HTTP Status CREATED"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "HTTP Status Bad Request"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ResponseErrorDto.class)
+            )
+        )
+    })
     @PostMapping
     public ResponseEntity<ResponseSuccessDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
 
@@ -47,6 +75,31 @@ public class AccountsController {
 
     }
 
+    @Operation(
+        summary = "Fetch Account Details REST API",
+        description = "REST API to fetch Customer & Account details based on a mobile number"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status OK"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "HTTP Status Bad Request"
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "HTTP Status Not Found"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ResponseErrorDto.class)
+            )
+        )
+    })
     @GetMapping("/{mobileNumber}")
     public ResponseEntity<CustomerAccountDto> fetchAccountByMobileNumber(
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
@@ -56,6 +109,31 @@ public class AccountsController {
                 .body(customerAccountDto);
     }
 
+    @Operation(
+        summary = "Update Account Details REST API",
+        description = "REST API to Update Customer & Account details based on a mobile number"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "204",
+            description = "HTTP Status No Content"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "HTTP Status Bad Request"
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "HTTP Status Not Found"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ResponseErrorDto.class)
+            )
+        )
+    })
     @PutMapping("/{accountNumber}")
     public ResponseEntity<ResponseSuccessDto> updateAccountByAccountNumber(
             @NotEmpty(message = "Account number can not be null or empty")
@@ -70,6 +148,31 @@ public class AccountsController {
 
     }
 
+    @Operation(
+        summary = "Delete Account Details REST API",
+        description = "REST API to Delete Customer & Account details based on a mobile number"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "204",
+            description = "HTTP Status No Content"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "HTTP Status Bad Request"
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "HTTP Status Not Found"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ResponseErrorDto.class)
+            )
+        )
+    })
     @DeleteMapping("/{mobileNumber}")
     public ResponseEntity<ResponseSuccessDto> deleteAccountByMobileNumber(
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
