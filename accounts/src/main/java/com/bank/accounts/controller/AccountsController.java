@@ -132,14 +132,14 @@ public class AccountsController {
             )
         )
     })
-    @PutMapping("/{accountNumber}")
-    public ResponseEntity<ResponseSuccessDto> updateAccountByAccountNumber(
-            @NotEmpty(message = "Account number can not be null or empty")
-            @Pattern(regexp = "(^$|[0-9]{10})", message = "Account number must be 10 digits")
-            @PathVariable String accountNumber,
+    @PutMapping("/{mobileNumber}")
+    public ResponseEntity<ResponseSuccessDto> MobileNumber(
+            @NotEmpty(message = "Mobile number can not be null or empty")
+            @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+            @PathVariable String mobileNumber,
             @Valid @RequestBody CustomerAccountDto customerAccountDto) {
 
-        accountsService.updateAccountByAccountNumber(accountNumber, customerAccountDto);
+        accountsService.updateAccountByMobileNumber(mobileNumber, customerAccountDto);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 

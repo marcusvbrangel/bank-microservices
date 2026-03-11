@@ -10,7 +10,6 @@ import com.bank.accounts.exception.ResourceNotFoundException;
 import com.bank.accounts.mapper.CustomerMapper;
 import com.bank.accounts.repository.AccountsRepository;
 import com.bank.accounts.repository.CustomerRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,18 +17,22 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
-@AllArgsConstructor
 public class AccountsService {
 
-    private AccountsRepository accountsRepository;
-    private CustomerRepository customerRepository;
+    private final AccountsRepository accountsRepository;
+    private final CustomerRepository customerRepository;
+
+    public AccountsService(AccountsRepository accountsRepository, CustomerRepository customerRepository) {
+        this.accountsRepository = accountsRepository;
+        this.customerRepository = customerRepository;
+    }
 
     @Transactional
     public void createAccount(CustomerDto customerDto) {
         Customer customer = CustomerMapper.mapToCustomer(customerDto);
         Optional<Customer> optionalCustomer = customerRepository.findByMobileNumber(customerDto.mobileNumber());
         if (optionalCustomer.isPresent()) {
-            throw new CustomerAlreadyExistsException("Customer with mobile number "
+            throw new CustomerAlreadyExistsException("Account with the customer mobile number "
                     + customerDto.mobileNumber() + " already exists");
         }
 
@@ -41,7 +44,7 @@ public class AccountsService {
 
         Customer customer =  customerRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a customer with the mobile number " + mobileNumber));
+                        "Can not be possible to find an account with the customer mobile number " + mobileNumber));
 
         return accountsRepository.findByCustomerId(customer.getCustomerId())
                 .map((account) -> {
@@ -54,35 +57,30 @@ public class AccountsService {
                             account.getBranchAddress() );
                 })
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Wasn't possible to find a account with the customer id "
+                        new ResourceNotFoundException("Can not be possible to find an account with the customer id "
                                 + customer.getCustomerId()));
 
     }
 
     @Transactional
-    public void updateAccountByAccountNumber(String accountNumber, CustomerAccountDto customerAccountDto) {
+    public void updateAccountByMobileNumber(String mobileNumber, CustomerAccountDto customerAccountDto) {
 
-        Accounts accounts = accountsRepository.findById(Long.valueOf(accountNumber))
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find account with the account number " + accountNumber));
+                        "Can not be possible to find a customer with the mobile number " + mobileNumber));
+
+        customer.setName(customerAccountDto.name());
+        customer.setEmail(customerAccountDto.email());
+
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Can not be possible to find account with the customer id " + customer.getCustomerId()));
 
         accounts.setBranchAddress(customerAccountDto.branchAddress());
         accounts.setAccountType(customerAccountDto.accountType());
 
-        accounts =  accountsRepository.save(accounts);
-
-        Long customerId = accounts.getCustomerId();
-
-        Customer customer = customerRepository.findById(accounts.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a customer with the customer id " + customerId));
-
-        customer.setName(customerAccountDto.name());
-        customer.setMobileNumber(customerAccountDto.mobileNumber());
-        customer.setEmail(customerAccountDto.email());
-        customer.setMobileNumber(customerAccountDto.mobileNumber());
-
         customerRepository.save(customer);
+        accountsRepository.save(accounts);
 
     }
 
@@ -91,7 +89,7 @@ public class AccountsService {
 
         Customer customer = customerRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a customer with the mobile number " + mobileNumber));
+                        "Can not be possible to find an account with the customer mobile number " + mobileNumber));
 
         accountsRepository.deleteByCustomerId(customer.getCustomerId());
         customerRepository.deleteById(customer.getCustomerId());
