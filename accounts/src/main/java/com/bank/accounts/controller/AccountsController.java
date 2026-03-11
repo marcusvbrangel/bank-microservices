@@ -133,7 +133,7 @@ public class AccountsController {
         )
     })
     @PutMapping("/{mobileNumber}")
-    public ResponseEntity<ResponseSuccessDto> MobileNumber(
+    public ResponseEntity<ResponseSuccessDto> updateAccountByMobileNumber(
             @NotEmpty(message = "Mobile number can not be null or empty")
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
             @PathVariable String mobileNumber,

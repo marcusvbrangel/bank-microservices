@@ -43,7 +43,7 @@ public class CardService {
 
         Card card =  cardRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a card with the mobile number " + mobileNumber));
+                        "Can not be possible to find a card with the mobile number " + mobileNumber));
 
         return new CardDto(
                 card.getMobileNumber(),
@@ -57,13 +57,12 @@ public class CardService {
     }
 
     @Transactional
-    public boolean updateCard(final CardDto cardDto) {
+    public void updateCardByMobileNumber(final String mobileNumber, final CardDto cardDto) {
 
-        Card card = cardRepository.findByMobileNumber(cardDto.mobileNumber())
+        Card card = cardRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a card with the account number " + cardDto.mobileNumber()));
+                        "Can not be possible to find a card with the mobile number " + mobileNumber));
 
-        card.setMobileNumber(cardDto.mobileNumber());
         card.setCardNumber(cardDto.cardNumber());
         card.setCardType(cardDto.cardType());
         card.setTotalLimit(cardDto.totalLimit());
@@ -72,20 +71,16 @@ public class CardService {
 
         cardRepository.save(card);
 
-        return true;
-
     }
 
     @Transactional
-    public boolean deleteCard(String mobileNumber) {
+    public void deleteCardByMobileNumber(String mobileNumber) {
 
         Card card = cardRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a card with the mobile number " + mobileNumber));
+                        "Can not be possible to find a card with the mobile number " + mobileNumber));
 
         cardRepository.delete(card);
-
-        return true;
 
     }
 

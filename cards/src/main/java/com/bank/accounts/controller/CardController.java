@@ -1,99 +1,172 @@
 package com.bank.accounts.controller;
 
 import com.bank.accounts.dto.CardDto;
-import com.bank.accounts.dto.CardsContactInfoDto;
+import com.bank.accounts.dto.ResponseErrorDto;
 import com.bank.accounts.dto.ResponseSuccessDto;
 import com.bank.accounts.service.CardService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+    name = "CRUD REST APIs for Cards in WolfBank",
+    description = "CRUD REST APIs in WolfBank to CREATE, UPDATE, FETCH AND DELETE card details"
+)
 @RestController
-@RequestMapping(value = "/api/v1/accounts")
+@RequestMapping(value = "/api/v1/cards")
 @Validated
 public class CardController {
 
-    private CardService cardService;
-
-    @Value("${build.version}")
-    private String buildVersion;
-
-    @Autowired
-    private Environment environment;
-
-    @Autowired
-    private CardsContactInfoDto cardsContactInfoDto;
+    private final CardService cardService;
 
     public CardController(CardService cardService) {
         this.cardService = cardService;
     }
 
+    @Operation(
+        summary = "Create Card REST API",
+        description = "REST API to create new Card inside WolfBank"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "201",
+            description = "HTTP Status CREATED"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "HTTP Status Bad Request"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ResponseErrorDto.class)
+            )
+        )
+    })
     @PostMapping
     public ResponseEntity<ResponseSuccessDto> createCard(@Valid @RequestBody CardDto cardDto) {
 
         cardService.createCard(cardDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ResponseSuccessDto(HttpStatus.CREATED.toString(), "Card created with success"));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
 
+    @Operation(
+        summary = "Fetch Card Details REST API",
+        description = "REST API to fetch Card details based on a mobile number"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status OK"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "HTTP Status Bad Request"
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "HTTP Status Not Found"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ResponseErrorDto.class)
+            )
+        )
+    })
     @GetMapping("/{mobileNumber}")
     public ResponseEntity<CardDto> fetchCardByMobileNumber(
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
             @PathVariable String mobileNumber) {
         CardDto cardDto = cardService.fetchCardByMobileNumber(mobileNumber);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(cardDto);
+        return ResponseEntity.status(HttpStatus.OK).body(cardDto);
     }
 
-    @PutMapping
-    public ResponseEntity<ResponseSuccessDto> updateCard(@Valid @RequestBody CardDto cardDto) {
+    @Operation(
+        summary = "Update Card Details REST API",
+        description = "REST API to Update Card details based on a mobile number"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "204",
+            description = "HTTP Status No Content"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "HTTP Status Bad Request"
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "HTTP Status Not Found"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ResponseErrorDto.class)
+            )
+        )
+    })
+    @PutMapping("/{mobileNumber}")
+    public ResponseEntity<ResponseSuccessDto> updateCardByMobileNumber(
+                                                                @Pattern(regexp = "(^$|[0-9]{10})",
+                                                                         message = "Mobile number must be 10 digits")
+                                                                @PathVariable String mobileNumber,
+                                                                @Valid @RequestBody CardDto cardDto) {
 
-        cardService.updateCard(cardDto);
+        cardService.updateCardByMobileNumber(mobileNumber, cardDto);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseSuccessDto(HttpStatus.OK.toString(), "Card updated successfully"));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
 
+    @Operation(
+        summary = "Delete Card Details REST API",
+        description = "REST API to Delete Card details based on a mobile number"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "204",
+            description = "HTTP Status No Content"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "HTTP Status Bad Request"
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "HTTP Status Not Found"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ResponseErrorDto.class)
+            )
+        )
+    })
     @DeleteMapping("/{mobileNumber}")
-    public ResponseEntity<ResponseSuccessDto> deleteCard(
+    public ResponseEntity<ResponseSuccessDto> deleteCardByMobileNumber(
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
             @PathVariable String mobileNumber) {
 
-        boolean isDeleted = cardService.deleteCard(mobileNumber);
+        cardService.deleteCardByMobileNumber(mobileNumber);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseSuccessDto(HttpStatus.OK.toString(), "Card deleted successfully"));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-    }
-
-    @GetMapping("/build-info")
-    public ResponseEntity<String> getBuildInfo() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(buildVersion);
-    }
-
-    @GetMapping("/java-version")
-    public ResponseEntity<String> getJavaVersion() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(environment.getProperty("JAVA_HOME"));
-    }
-
-    @GetMapping("/contact-info")
-    public ResponseEntity<CardsContactInfoDto> getContactInfo() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(cardsContactInfoDto);
     }
 
 }
