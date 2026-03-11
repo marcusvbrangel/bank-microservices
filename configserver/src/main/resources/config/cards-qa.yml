@@ -2,7 +2,7 @@ build:
   version: "2.0"
 
 cards:
-  message: "Welcome to WolfBank cards related QA APIs "
+  message: "Welcome to WolfBank accounts related QA APIs "
   contactDetails:
     name: "Cherryl Pankaj - QA Lead"
     email: "cherryl@wolfbank.com"

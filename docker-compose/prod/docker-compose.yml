@@ -37,13 +37,13 @@ services:
 
   cards:
     image: "marcusvbrangel/cards:1.0.1"
-    container_name: cards-ms
+    container_name: accounts-ms
     ports:
       - "8083:8083"
     depends_on:
       - configserver
     environment:
-      SPRING_APPLICATION_NAME: "cards"
+      SPRING_APPLICATION_NAME: "accounts"
     extends:
       file: common-config.yml
       service: microservice-configserver-config

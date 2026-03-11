@@ -41,14 +41,14 @@ services:
 
   cards:
     image: "marcusvbrangel/cards:1.0.1"
-    container_name: cards-ms
+    container_name: accounts-ms
     ports:
       - "8083:8083"
     depends_on:
       - configserver
       - postgres
     environment:
-      SPRING_APPLICATION_NAME: "cards"
+      SPRING_APPLICATION_NAME: "accounts"
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/cardsdb
     extends:
       file: common-config.yml

@@ -2,7 +2,7 @@ build:
   version: "3.0"
 
 cards:
-  message: "Welcome to WolfBank cards related local APIs "
+  message: "Welcome to WolfBank accounts related local APIs "
   contactDetails:
     name: "Dragos Lech - Developer"
     email: "dragos@wolfbank.com"

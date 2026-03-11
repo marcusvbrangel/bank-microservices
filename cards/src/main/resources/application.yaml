@@ -1,10 +1,10 @@
 server:
   port: 8083
-  name: cards
+  name: accounts
 
 spring:
   application:
-    name: cards
+    name: accounts
   profiles:
     active: prod
   datasource:
