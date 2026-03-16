@@ -43,7 +43,7 @@ public class LoansService {
 
         Loans loans =  loansRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a loan with the mobile number " + mobileNumber));
+                        "Can not be possible to find a loan with the mobile number " + mobileNumber));
 
         return new LoansDto(
                 loans.getMobileNumber(),
@@ -57,13 +57,12 @@ public class LoansService {
     }
 
     @Transactional
-    public boolean updateLoan(final LoansDto loansDto) {
+    public void updateLoan(String mobileNumber, final LoansDto loansDto) {
 
-        Loans loans = loansRepository.findByMobileNumber(loansDto.mobileNumber())
+        Loans loans = loansRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a loan with the account number " + loansDto.loanNumber()));
+                        "Can not be possible to find a loan with the account number " + mobileNumber));
 
-        loans.setMobileNumber(loansDto.mobileNumber());
         loans.setLoanNumber(loansDto.loanNumber());
         loans.setLoanType(loansDto.loanType());
         loans.setTotalLoan(loansDto.totalLoan());
@@ -72,20 +71,16 @@ public class LoansService {
 
         loansRepository.save(loans);
 
-        return true;
-
     }
 
     @Transactional
-    public boolean deleteLoan(String mobileNumber) {
+    public void deleteLoan(String mobileNumber) {
 
         Loans loans = loansRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Wasn't possible to find a loan with the mobile number " + mobileNumber));
+                        "Can not be possible to find a loan with the mobile number " + mobileNumber));
 
         loansRepository.delete(loans);
-
-        return true;
 
     }
 
