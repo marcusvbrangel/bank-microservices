@@ -1,0 +1,33 @@
+
+server:
+#  port: 8089
+  name: accounts
+
+spring:
+  application:
+    name: gatewayserver
+  config:
+    import: "optional:configserver:http://localhost:9091/"
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+              lowerCaseServiceId: true
+
+management:
+  endpoints:
+    enable-by-default: false
+    web:
+      exposure:
+        include: "health, metrics"
+  endpoint:
+    gateway:
+      access: unrestricted
+    health:
+      enable: true
+      show-details: always
+    metrics:
+      enable: true

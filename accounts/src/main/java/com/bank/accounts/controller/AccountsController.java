@@ -33,9 +33,6 @@ public class AccountsController {
 
     private final AccountsContactInfoDto accountsContactInfoDto;
 
-    @Value("${build.version}")
-    private String buildVersion;
-
     public AccountsController(AccountsService accountsService, Environment environment,
                               AccountsContactInfoDto accountsContactInfoDto) {
         this.accountsService = accountsService;
@@ -185,7 +182,7 @@ public class AccountsController {
     public ResponseEntity<String> getBuildInfo() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(buildVersion);
+                .body(null);
     }
 
     @GetMapping("/java-version")

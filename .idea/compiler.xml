@@ -9,11 +9,18 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
+        <module name="configserver" />
         <module name="cards" />
         <module name="accounts" />
-        <module name="configserver" />
         <module name="loans" />
+      </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gatewayserver" />
       </profile>
     </annotationProcessing>
   </component>
@@ -22,6 +29,7 @@
       <module name="accounts" options="-parameters" />
       <module name="cards" options="-parameters" />
       <module name="configserver" options="-parameters" />
+      <module name="gatewayserver" options="-parameters" />
       <module name="loans" options="-parameters" />
     </option>
   </component>
