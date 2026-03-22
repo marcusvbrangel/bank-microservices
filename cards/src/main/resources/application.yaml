@@ -1,10 +1,10 @@
 server:
   port: 8083
-  name: accounts
+  name: cards
 
 spring:
   application:
-    name: accounts
+    name: cards
   profiles:
     active: prod
   datasource:
@@ -25,3 +25,42 @@ spring:
         format_sql: true
   config:
     import: "optional:configserver:http://localhost:9091/"
+
+management:
+  endpoints:
+    enable-by-default: false
+    web:
+      exposure:
+        include: "health, metrics, info"
+  endpoint:
+    health:
+      enable: true
+      show-details: always
+    metrics:
+      enable: true
+    info:
+      env:
+        enable: true
+    shutdown:
+      access: unrestricted
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+info:
+  app:
+    name: "cards"
+    description: "Wolf Cards Accounts Microservice"
+    version: "1.1.0"
+
+logging:
+  level:
+    com:
+      bank:
+        accounts: DEBUG

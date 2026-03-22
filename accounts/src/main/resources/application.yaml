@@ -31,19 +31,39 @@ management:
     enable-by-default: false
     web:
       exposure:
-        include: "health, metrics"
+        include: "health, metrics, info"
   endpoint:
     health:
       enable: true
       show-details: always
     metrics:
       enable: true
+    info:
+      env:
+        enable: true
+    shutdown:
+      access: unrestricted
 
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
 
+info:
+  app:
+    name: "accounts"
+    description: "Wolf Bank Accounts Microservice"
+    version: "1.1.0"
 
-
-
-
+logging:
+  level:
+    com:
+      bank:
+        accounts: DEBUG
 
 
 
